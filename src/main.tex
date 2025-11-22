@@ -1,0 +1,110 @@
+% Classe.
+\documentclass[
+  %% Opções da classe memoir.
+  article, % Indica que é um artigo acadêmico.
+  11pt,    % Tamanho da fonte.
+  oneside, % Para impressão apenas no recto.
+  a4paper, % Tamanho do papel.
+  %% Opções da classe abntex2.
+  %%% Tìtulos de letra maiúscula.
+  chapter=TITLE,
+  section=TITLE,
+  subsection=TITLE,
+  subsubsection=TITLE,
+  %% Opções do pacote babel.
+  english,
+  brazilian
+]{abntex2}
+
+% Pacotes.
+\usepackage[T1]{fontenc} % Permite fontes com mais glifos (letras).
+\usepackage[utf8]{inputenc} % UTF-8.
+%% Fonte bonita que é usada até hoje.
+%% Veja: <https://tex.stackexchange.com/questions/147194/is-it-still-useful-to-load-the-lmodern-package>
+\usepackage{lmodern}
+\usepackage{amsmath, amsthm, amssymb, mathtools} % Coisas de matemática.
+\usepackage{microtype} % Personalização de justificação.
+\usepackage{indentfirst} % Indenta o primeiro parágrafo de cada seção.
+\usepackage{graphicx} % Coisas gráficas.
+% Comandos
+\newcommand{\imprimircapaelogo}{
+  \begin{center}
+    \includegraphics[scale=0.2]{img/logo_ufs}
+  \end{center}
+  \imprimircapa
+}
+\newcommand{\orcid}[2]{
+  \href{#1}{\includegraphics[scale=0.06]{img/orcid.pdf}\hspace{1mm}#2}
+}
+% Configuração ABNT.
+\titulo{\uppercase{Probabilidade com Dados do DETRAN/SE}}
+\autor{\orcid{https://orcid.org/0009-0005-5652-617X}{Gabriel Santos de Souza}}
+\orientador{Esdras Adriano Barbosa dos Santos}
+\instituicao{Universidade Federal de Sergipe -- UFS}
+\local{São Cristóvão}
+\data{2025}
+\preambulo{Relatório à Universidade Federal de Sergipe como requisito de avaliação parcial da disciplina de Estatística Aplicada e, por conseguinte, a obtenção dos seus créditos.}
+% Configuração de citação.
+\usepackage[brazilian,hyperpageref]{backref} % Página com citações.
+\usepackage[alf]{abntex2cite} % Citações ABNT.
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+\renewcommand{\backref}{}
+\renewcommand*{\backrefalt}[4]{
+  \ifcase #1 %
+  Nenhuma citação no texto.%
+  \or
+  Citado na página #2.%
+  \else
+  Citado #1 vezes nas páginas #2.%
+  \fi}%
+% Configuração do PDF.
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  pdfsubject={\imprimirpreambulo},
+  pdfcreator={LaTeX with abnTeX2},
+  pdfkeywords={universidade federal de sergipe}{federal university of sergipe}{detran}{acidente}{sinistro}{accident}{sergipe},
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  filecolor=magenta,
+  urlcolor=blue,
+  bookmarksdepth=4
+}
+\makeatother
+% Espaçamento.
+\setlrmarginsandblock{3cm}{3cm}{*}
+\setulmarginsandblock{3cm}{3cm}{*}
+\checkandfixthelayout
+\setlength{\parindent}{1.3cm}
+\setlength{\parskip}{0.2cm}
+\SingleSpacing
+% Documento.
+\makeindex % Compila o índice.
+\begin{document}
+
+\selectlanguage{brazilian}
+\frenchspacing % Espaçamento normal entre frases. O LaTeX usa o espaçamento arcaico de 2 espaços em vez de 1.
+
+\imprimircapaelogo
+
+\imprimirfolhaderosto
+
+\tableofcontents* % O "*" imprime o sumário sem indicar a página do próprio sumário.
+
+\cleardoublepage
+
+\textual
+
+\section{Introdução}
+
+Este relatório busca avaliar o estado do trânsito de motocicletas em Aracaju, mediante a análise dos dados de sinistros deste tipo de veículo no ano de 2024, divulgados pelo DETRAN/SE.
+
+\postextual
+
+\cleardoublepage
+
+\bibliography{bibliografia}
+
+\end{document}
