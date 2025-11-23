@@ -1,19 +1,19 @@
 % Classe.
 \documentclass[
-  %% Opções da classe memoir.
-  article, % Indica que é um artigo acadêmico.
-  12pt,    % Tamanho da fonte.
-  oneside, % Para impressão apenas no recto.
-  a4paper, % Tamanho do papel.
-  %% Opções da classe abntex2.
-  %%% Tìtulos de letra maiúscula.
-  chapter=TITLE,
-  section=TITLE,
-  subsection=TITLE,
-  subsubsection=TITLE,
-  %% Opções do pacote babel.
-  english,
-  brazilian
+%% Opções da classe memoir.
+article, % Indica que é um artigo acadêmico.
+12pt,    % Tamanho da fonte.
+oneside, % Para impressão apenas no recto.
+a4paper, % Tamanho do papel.
+%% Opções da classe abntex2.
+%%% Tìtulos de letra maiúscula.
+chapter=TITLE,
+section=TITLE,
+subsection=TITLE,
+subsubsection=TITLE,
+%% Opções do pacote babel.
+english,
+brazilian
 ]{abntex2}
 
 % Pacotes.
@@ -36,6 +36,9 @@
 \newcommand{\orcid}[2]{
   \href{#1}{\includegraphics[scale=0.06]{img/orcid.pdf}\hspace{1mm}#2}
 }
+\newcommand{\probabilidadeemt}[1]{
+  \hat{P}( \geq 1 \text{ em } t) \text{ com } t = #1
+}
 % Configuração ABNT.
 \titulo{\uppercase{Probabilidade com Dados do DETRAN/SE}}
 \autor{\orcid{https://orcid.org/0009-0005-5652-617X}{Gabriel Santos de Souza}}
@@ -51,11 +54,11 @@
 \renewcommand{\backref}{}
 \renewcommand*{\backrefalt}[4]{
   \ifcase #1 %
-  Nenhuma citação no texto.%
+    Nenhuma citação no texto.%
   \or
-  Citado na página #2.%
+    Citado na página #2.%
   \else
-  Citado #1 vezes nas páginas #2.%
+    Citado #1 vezes nas páginas #2.%
   \fi}%
 % Configuração do PDF.
 \makeatletter
@@ -91,6 +94,18 @@
 
 \imprimirfolhaderosto
 
+% Lista de ilustrações.
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+
+\cleardoublepage
+
+% Lista de tabelas.
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+
+\cleardoublepage
+
 \begin{siglas}
 \item[DETRAN] Departamento Estadual de Trânsito
 \item[SE] Sergipe
@@ -106,14 +121,182 @@
 
 \section{Introdução}
 
-Este relatório busca avaliar o estado do trânsito de motocicletas em Aracaju, mediante a análise dos dados de sinistros deste tipo de veículo no ano de 2024, divulgados pelo DETRAN/SE.
+Este relatório busca avaliar a situação do transito no estado de Sergipe, particularmente a circulação de motocicletas.
 
-Os dados tem como procedência o SAST/BPTRAN.
+O Conselho Nacional de Trânsito define como ``motocicleta'' um veículo de duas rodas conduzido na posição \textit{montada} (levemente inclinado). Essa categoria difere da motoneta pois estes veículos são conduzidos numa posição diferente, a posição \textit{sentada} \citeonline{venturaVoceSabeQual2025}.
+
+Os dados tem como procedência o SAST/BPTRAN. Outras fontes são disponibilizadas no portal, mas estas são as selecionadas por padrão.
+
+\section{Dados}
+
+80\% dos sinistros de trânsito no Estado tiveram como público motociclistas em 2024 \citeonline{DetranSERealiza2024}.
+
+A frota de motocicletas em Sergipe era de 340889 \citeonline{ministerioFrotaDeVeiculos2024}.
+
+No portal do DETRAN do estado, no ano de 2024, foram registrados 873 sinistros \citeonline{DetranSEEstatisticasSinistro2024}.
+
+\subsection{Cálculos}
+
+As equações usadas aqui podem ser encontradas no documento desta atividade avaliativa, disponibilizado pelo orientador.
+
+\subsubsection{Taxa por Unidade de Exposição (\(\hat{\lambda}\))}
+
+Seja \(Y_{s,v}\), tal que \(s\) é o tipo de sinistro e \(v\) o tipo de veículos, a contagem de eventos em um período.
+
+Seja \(E\) a exposição, que, no caso deste relatório, é a quantidade de veículos \(v\).
+
+Podemos modelar a taxa por unidade de exposição \(\hat{\lambda}\) como
+
+\begin{equation} \label{eq:1}
+  \hat{\lambda} = \frac{Y_{s.v}}{E}
+\end{equation}
+
+Usando a equação \ref{eq:1} podemos calcular, em ``média'', quantos sinistros envolvendo motocicletas temos por ano:
+
+Usando a informação do portal de 873 sinistros, e as 340889 motocicletas da tabela de frota de veículos do Ministério dos Transportes, temos que
+
+\[
+  \hat{\lambda} = \frac{873}{340889} \approx 0,002561 \text{ motocicletas-ano}
+\]
+
+\subsubsection{Probabilidades por Ano}
+
+Com essa taxa \(\hat{\lambda}\) em mãos, podemos calcular a probabilidade de uma motocicleta estar envolvida em um sinistro por ano. Através da seguinte equação:
+
+\begin{equation} \label{eq:2}
+  \hat{P}(\geq 1 \text{ em } t) = 1 - \exp(-\hat{\lambda}t)
+\end{equation}
+
+Onde \(t\) é a quantidade de anos e \(\exp\) é \(\exp(x) = e^{x}\).
+
+Com essa equação \ref{eq:2} em mãos, podemos calcular a probabilidade para diversas quantidades de anos:
+
+\begin{table}[h]
+  \ABNTEXfontereduzida
+  \caption[Probabilidades de sinistros envolvendo motocicletas (\(t\) = anos)]{Probabilidades de sinistros envolvendo motocicletas (\(t\) = anos).}
+  \label{tbl:1}
+  \begin{center}
+    \begin{tabular}{p{4cm}p{4cm}p{4cm}}
+      \toprule
+      \(t\) & Probabilidade (\%) & Quantidade de Sinistros \\
+      \midrule
+      1 & 0,2558\% & 872 \\
+      2 & 0,51089\% & 1742 \\
+      3 & 0,7654\% & 2609\\
+      4 & 1,019\% & 3473\\
+      5 & 1,272\% & 4336\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Demonstrando uma tendência alarmente. Se o governo seguir com campanhas de conscientização tais como a blitz educativa de 29 de novembro \citeonline{DetranSERealiza2024}, essa situação poderá ser revertida.
+
+\section{Quadro}
+
+\begin{table}[h]
+  \ABNTEXfontereduzida
+  \caption[Quadro de Informações]{Quadro de Informações.}
+  \begin{center}
+    \begin{tabular}{p{4cm}p{4cm}}
+      \toprule
+      \textit{Informação} & \textit{Valor} \\
+      \midrule
+      % \ABNTEXfontereduzida
+      Tipo de sinistro (\(s\)) & Sem vítimas \\
+      Tipo de veículo (\(v\)) & Motocicleta \\
+      Período & Ano 2024 \\
+      Município/Âmbito & Sergipe \\
+      Contagem \(Y_{s,v}\) & 873 \\
+      Exposição \(E\) & 340889 \\
+      \(\hat{\lambda} = Y_{s, v}/E\) & 0,00256 \\
+      \(\probabilidadeemt{1}\) & 0,2558\% \\
+      \(\probabilidadeemt{2}\) & 0,51089\% \\
+      \(\probabilidadeemt{3}\) & 0,7654\% \\
+      \(\probabilidadeemt{4}\) & 1,019\% \\
+      \(\probabilidadeemt{5}\) & 1,272\% \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \legend{Fonte: Portal do DETRAN/SE \(\rightarrow\) \textit{Estatísticas de sinistro de trânsito}}
+\end{table}
 
 \postextual
 
 \cleardoublepage
 
 \bibliography{bibliografia}
+
+\cleardoublepage
+
+\begin{apendicesenv}
+  \partapendices
+
+  \section{Cálculos}
+
+  \subsection{Probabilidades de sinistro envolvendo motocicletas}
+
+  Nesta seção encontram-se os cálculos feitos para cada quantidade de anos da tabela \ref{tbl:1}. A meta foi quatro algarismos significativos, assim como no documento de instrução desta atividade.
+
+  Seja \(P\) a probabilidade, \(Q\) a quantidade e usando a equação \ref{eq:2} para encontrar o valor de \(P\):
+
+  \begin{itemize}
+  \item \(t = 1\)
+    \[
+      P = 1 - \exp(-0,002561) \approx 0,002558 = 0,2558\%
+    \]
+    \[
+      Q = 340889 \cdot 0,2558\% \approx 872
+    \]
+  \item \(t = 2\)
+    \[
+      P = 1 - \exp(-2 \cdot 0,002561) \approx 0,0051089 = 0,51089\%
+    \]
+    \[
+      Q = 340889 \cdot 0,51089\% \approx 1742
+    \]
+  \item \(t = 3\)
+    \[
+      P = 1 - \exp(-3 \cdot 0,002561) \approx 0,007654 = 0,7654\%
+    \]
+    \[
+      Q = 340889 \cdot 0,7654\% \approx 2609
+    \]
+  \item \(t = 4\)
+    \[
+      P = 1 - \exp(-4 \cdot 0,002561) \approx 0,01019 = 1,019\%
+    \]
+    \[
+      Q = 340889 \cdot 1,019\% \approx 3473
+    \]
+  \item \(t = 5\)
+    \[
+      P = 1 - \exp(-5 \cdot 0,002561) \approx 0,01272 = 1,272\%
+    \]
+    \[
+      Q = 340889 \cdot 1,272\% \approx 4336
+    \]
+  \end{itemize}
+
+\end{apendicesenv}
+
+\cleardoublepage
+
+\begin{anexosenv}
+  \partanexos
+
+  \begin{figure}[htb]
+    \caption[Tabela Completa de Sinistros]{Tabela Completa de Sinistros.}
+    \includegraphics[scale=0.6]{img/tabela_completa}
+  \end{figure}
+
+  \cleardoublepage
+
+  \begin{figure}[htb]
+      \caption[Regras para ciclomotores, motonetas e motocicletas]{Regras para ciclomotores, motonetas e motocicletas.}
+      \includegraphics[scale=0.4]{img/ministerio_dos_transportes}
+  \end{figure}
+
+\end{anexosenv}
 
 \end{document}

@@ -1,0 +1,10 @@
+* DONE Adicionar tabela completa aos anexos
+CLOSED: [2025-11-22 Sat 19:25]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2025-11-22 Sat 19:25]
+:END:
+* DONE Adicionar imagem da resolução do Contran aos anexos
+CLOSED: [2025-11-22 Sat 19:33]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2025-11-22 Sat 19:33]
+:END:

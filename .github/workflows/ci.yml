@@ -1,0 +1,56 @@
+# This workflow compiles the document, uploads it as an artifact
+# and hosts it as a site.
+
+name: CI
+
+on:
+  push:
+    paths:
+      - 'src/main.tex'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+    - name: Install TeX Live
+      run: |
+        sudo apt update -y
+        sudo apt install make -y
+        sudo apt install texlive-full -y
+    - name: Compile LaTeX Docs
+      run: |
+        make
+    - name: Upload Artifact
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+      with:
+        name: dist
+        path: dist/main.pdf
+    - name: Generate HTML
+      run: |
+        podman run -ti --rm -v .:/pdf -w /pdf pdf2htmlex/pdf2htmlex:0.18.8.rc2-master-20200820-alpine-3.12.0-x86_64 dist/main.pdf
+        mv main.html dist/index.html
+    - name: Setup Pages
+      uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
+    - name: Upload Page
+      uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
+      with:
+        path: 'dist/'
+    - name: Deploy Page
+      uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
